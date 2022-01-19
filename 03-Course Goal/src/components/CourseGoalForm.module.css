@@ -1,0 +1,61 @@
+.course-goal__form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem 4rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 0px #00000057;
+}
+
+.course-goal__label {
+  font-size: 2rem;
+  text-transform: capitalize;
+  word-spacing: 5px;
+  letter-spacing: 2px;
+  color: #333;
+  margin-bottom: 0.7rem;
+}
+
+.course-goal__form {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  width: 100%;
+}
+
+.course-goal__form input,
+.course-goal__form button {
+  box-shadow: 0 0 2px 0px #00000057;
+  border: 2px solid transparent;
+  outline: 0;
+  width: 100%;
+}
+
+.course-goal__form input {
+  font-size: 1.6rem;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.coures-goal__form input:hover {
+  background-color: black;
+  box-shadow: 0 0 10px 0px #00000057;
+}
+
+.course-goal__form button {
+  padding: 2rem;
+  background-color: aqua;
+  font-size: 1.6rem;
+  color: #333;
+  border-radius: 5px;
+}
+
+.course-goal__form.invalid input {
+  background: rgb(245, 177, 177);
+  border-color: red;
+}
+
+.course-goal__form.invalid label {
+  color: red;
+}

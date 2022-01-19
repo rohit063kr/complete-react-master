@@ -1,0 +1,18 @@
+.course-goal__list {
+  margin: 2rem 0;
+  list-style: none;
+  width: 100%;
+}
+
+.course-goal__list-item {
+  padding: 1rem 2rem;
+  background: rgb(0, 255, 64);
+  color: #fff;
+  font-size: 1.8rem;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.course-goal__list-item:not(:last-child) {
+  margin-bottom: 1rem;
+}
