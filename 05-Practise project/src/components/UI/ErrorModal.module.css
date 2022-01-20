@@ -1,0 +1,27 @@
+.modal > *:not(:last-child) {
+  margin-bottom: 3rem;
+}
+
+.modal-backdrop {
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.432);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30vw;
+  transform: translate(-50%, -0%);
+  padding: 2rem;
+  z-index: 11;
+}
+/* 
+.hidden {
+  display: none;
+} */

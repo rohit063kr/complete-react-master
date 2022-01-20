@@ -1,0 +1,17 @@
+.user__list {
+  list-style: none;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  padding: 2rem;
+}
+
+.user__list li:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.user__list li {
+  padding: 1.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
