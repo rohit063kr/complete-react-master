@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 // import UserButton from './UserButton';
 import Button from '../UI/Button';
@@ -8,13 +8,11 @@ import ErrorModal from '../UI/ErrorModal';
 
 import styles from './UserForm.module.css';
 
-let isValid = true;
-
 const UserForm = function (props) {
   const [error, setError] = useState();
 
-  const [enteredName, setEnteredName] = useState('');
-  const [enteredAge, setEnteredAge] = useState('');
+  const userNameInputRef = useRef();
+  const ageInputRef = useRef();
 
   const modalHideHandler = function () {
     setError(undefined);
@@ -24,18 +22,11 @@ const UserForm = function (props) {
     setError({ title, message });
   };
 
-  const userNameChangeHandler = function (e) {
-    setEnteredName(e.target.value);
-  };
-
-  const ageChangeHandler = function (e) {
-    setEnteredAge(e.target.value);
-  };
-
-  const formData = { name: enteredName, age: enteredAge };
-
   const formSubmitHandler = function (e) {
     e.preventDefault();
+
+    const enteredName = userNameInputRef.current.value;
+    const enteredAge = ageInputRef.current.value;
 
     if (enteredName.trim().length === 0 || enteredAge.trim().length === 0) {
       modalShowHandler(
@@ -52,13 +43,12 @@ const UserForm = function (props) {
 
     setError(undefined);
 
-    props.onFormSubmit(formData);
-    setEnteredName('');
-    setEnteredAge('');
+    props.onFormSubmit({ name: enteredName, age: enteredAge });
+    userNameInputRef.current.value = ageInputRef.current.value = '';
   };
 
   return (
-    <div>
+    <React.Fragment>
       {error && (
         <ErrorModal
           onModalCancel={modalHideHandler}
@@ -76,8 +66,7 @@ const UserForm = function (props) {
               className={styles['user__inputs']}
               id="name"
               type="text"
-              onChange={userNameChangeHandler}
-              value={enteredName}
+              ref={userNameInputRef}
             />
 
             <label className={styles['user__label']} htmlFor="age">
@@ -87,14 +76,13 @@ const UserForm = function (props) {
               className={styles['user__inputs']}
               id="age"
               type="number"
-              onChange={ageChangeHandler}
-              value={enteredAge}
+              ref={ageInputRef}
             />
           </div>
           <Button type="submit">Add user</Button>
         </form>
       </Card>
-    </div>
+    </React.Fragment>
   );
 };
 
