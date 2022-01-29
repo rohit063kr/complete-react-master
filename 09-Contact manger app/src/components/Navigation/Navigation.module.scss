@@ -1,0 +1,43 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+
+  &__list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+  }
+
+  &__list-item {
+    display: flex;
+    align-self: stretch;
+    align-items: flex-end;
+
+    &:not(:last-child) {
+      margin-right: 0.5rem;
+    }
+  }
+
+  &__logo {
+    font-size: 3rem;
+    color: #000;
+    margin-right: 1rem;
+  }
+
+  &__logo-description {
+    font-size: 1.3rem;
+    color: var(--color-text);
+  }
+
+  &__btn {
+    font-size: 15px;
+    padding: 0.5rem 2rem;
+  }
+
+  &__icon {
+    margin-right: 1rem;
+  }
+}

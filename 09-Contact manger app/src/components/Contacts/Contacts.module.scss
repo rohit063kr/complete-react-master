@@ -1,0 +1,18 @@
+.contacts {
+  background-color: #fff;
+  box-shadow: var(--box-shadow-border);
+  border-radius: 7px;
+
+  &__contact {
+    display: flex;
+    width: 40%;
+  }
+
+  &__list > *:not(:last-child) {
+    border-bottom: 2px solid #ccc;
+  }
+
+  &__list > *:not(:first-child) {
+    cursor: pointer;
+  }
+}

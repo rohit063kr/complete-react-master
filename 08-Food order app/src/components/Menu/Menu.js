@@ -16,10 +16,7 @@ const Menu = function (props) {
         the cites of the word in classical literature, discovered the
         undoubtable source. Lorem
       </p>
-      <MenuList
-        onItemBought={props.onBuy}
-        items={props.itemsData.itemsPresent}
-      />
+      <MenuList />
     </div>
   );
 };

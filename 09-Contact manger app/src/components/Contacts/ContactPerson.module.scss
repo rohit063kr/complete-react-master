@@ -1,0 +1,19 @@
+.contacts {
+  &__all-select {
+    margin-right: 1.5rem;
+    border: var(--border-dull);
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 4rem;
+    height: 4rem;
+    background-color: turquoise;
+    border-radius: 50%;
+    color: #fff;
+    margin-right: 0.6rem;
+  }
+}

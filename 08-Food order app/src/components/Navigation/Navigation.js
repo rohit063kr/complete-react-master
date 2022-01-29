@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ReactDom from 'react-dom';
+
+import CartContext from '../../store/cart-context';
 
 import Cart from '../Cart/Cart';
 
 import styles from './Navigation.module.scss';
 
 const Navigation = function (props) {
+  const cartCtx = useContext(CartContext);
+
   return (
     <React.Fragment>
       {props.modalStatus &&
         ReactDom.createPortal(
           <Cart
             onModalClose={props.onModalClose}
-            itemsData={props.items}
             modalStatus={props.modalStatus}
           />,
           document.getElementById('cart-root')
@@ -36,7 +39,7 @@ const Navigation = function (props) {
               className={`${styles['navigation__link']} ${styles['navigation__cart']}`}
               onClick={props.onModalOpen}
             >
-              Cart <span>{props.purchasedItems}</span>
+              Cart <span>{cartCtx.itemsInCart.length}</span>
             </a>
           </li>
         </ul>

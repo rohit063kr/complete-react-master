@@ -37,18 +37,4 @@
     font-size: 1.7rem;
     color: rgb(255, 0, 255);
   }
-
-  &__item-config {
-    display: flex;
-  }
-
-  &__item-times {
-    display: flex;
-    justify-items: flex-end;
-    text-align: center;
-
-    & input {
-      width: 50%;
-    }
-  }
 }

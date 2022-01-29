@@ -1,24 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 
-import Button from '../UI/Button';
+import CartContext from '../../store/cart-context';
+
 import Card from '../UI/Card';
 import ListItems from '../UI/ListItems';
+import MenuForm from './MenuForm';
 
 import styles from './MenuList.module.scss';
 
 const MenuList = function (props) {
+  const cartCtx = useContext(CartContext);
   const timesInputRef = useRef();
-
-  const itemBoughtHandler = function (e) {
-    props.onItemBought(
-      e.target.closest('.' + styles['menu__list-item']).dataset.id,
-      +timesInputRef.current.value
-    );
-  };
 
   return (
     <Card className={styles['menu__list']}>
-      {props.items.map(item => (
+      {cartCtx.itemsAvailable.map(item => (
         <ListItems
           key={item.item}
           className={styles['menu__list-item']}
@@ -31,19 +27,7 @@ const MenuList = function (props) {
             </p>
             <p className={styles['menu__item-cost']}>$ {item.cost}</p>
           </div>
-          <div className={styles['menu__item-config']}>
-            <div className={styles['menu__item-times']}>
-              <label>Quantity:</label>
-              <input ref={timesInputRef} type="number" />
-            </div>
-            <Button
-              type="button"
-              className={styles['menu__btn']}
-              onClick={itemBoughtHandler}
-            >
-              +Add
-            </Button>
-          </div>
+          <MenuForm />
         </ListItems>
       ))}
     </Card>
