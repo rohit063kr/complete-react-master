@@ -23,6 +23,8 @@ const ContactItem = function (props) {
       <div className={styles['contacts__tags']}>
         {props.isLabelling
           ? 'Tags'
+          : props.data.tags.length === 0
+          ? ''
           : props.data.tags.split(',').map(el => (
               <span key={Math.random()} className={styles['contacts__tag']}>
                 {el}

@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import styles from './HeaderSearchForm.module.scss';
 import Input from '../UI/Input';
 
+import ContactContext from '../../store/contact-context/contact-context';
+
 const HeaderSearchFrom = function (props) {
+  const ContactCtxValues = useContext(ContactContext);
+
   const searchInputChangeHandler = function (e) {
-    props.onContactsFilter(e.target.value);
+    ContactCtxValues.filterContacts(e.target.value);
   };
 
   return (

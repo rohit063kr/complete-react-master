@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
+import ContactContext from '../../store/contact-context/contact-context';
+import NewFormContext from '../../store/new-form-context/new-form-context';
 
 import Button from '../UI/Button';
 
 import styles from './Navigation.module.scss';
 
 const Navigation = function (props) {
+  const NewFormCtxValues = useContext(NewFormContext);
+  const ContactCtxValues = useContext(ContactContext);
+
   return (
     <div className={styles['navigation']}>
       <ul className={styles['navigation__list']}>
@@ -13,7 +19,7 @@ const Navigation = function (props) {
         </li>
         <li className={styles['navigation__list-item']}>
           <p className={styles['navigation__logo-description']}>
-            {props.numContacts} contacts
+            {ContactCtxValues.numOfContacts} contacts
           </p>
         </li>
       </ul>
@@ -32,7 +38,7 @@ const Navigation = function (props) {
           <Button
             type="button"
             className={`btn-primary ${styles['navigation__btn']}`}
-            onClick={props.onFormAdd}
+            onClick={NewFormCtxValues.openForm}
           >
             <i className={`fas fa-user-plus ${styles['navigation__icon']}`} />
             Add new

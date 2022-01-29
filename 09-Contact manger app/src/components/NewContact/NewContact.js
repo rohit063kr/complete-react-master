@@ -1,9 +1,12 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useReducer, useRef, useContext } from 'react';
 
 import styles from './NewContact.module.scss';
 
 import Button from '../UI/Button';
-import Input from '../UI/Input';
+import NewContactInput from './NewContactInput';
+
+import NewFormContext from '../../store/new-form-context/new-form-context';
+import ContactContext from '../../store/contact-context/contact-context';
 
 const formValidReducer = function (_, action) {
   if (action.type === 'NAME_INPUT_INVALID')
@@ -32,6 +35,9 @@ const NewContact = function (props) {
       errSite: null,
     }
   );
+
+  const ContactCtxValues = useContext(ContactContext);
+  const NewFormCtxValues = useContext(NewFormContext);
 
   const nameInputRef = useRef();
   const phoneInputRef = useRef();
@@ -63,7 +69,6 @@ const NewContact = function (props) {
     const { isValid } = checkFormValid();
 
     if (!isValid) return;
-    console.log(true);
 
     const data = {
       name: nameInputRef.current.value,
@@ -72,15 +77,15 @@ const NewContact = function (props) {
       id: Math.random(),
     };
 
-    props.onFormSubmit(data);
-    props.onFormRemove();
+    ContactCtxValues.addContact(data);
+    NewFormCtxValues.closeForm();
   };
 
-  return (
+  return NewFormCtxValues.isRequired ? (
     <React.Fragment>
       <div
         className={styles['contact-overlay']}
-        onClick={props.onFormRemove}
+        onClick={NewFormCtxValues.closeForm}
       ></div>
       <form
         className={styles['contact-form']}
@@ -91,46 +96,23 @@ const NewContact = function (props) {
           type="button"
           className={`${styles['contact-form__btn-cancel']}`}
         >
-          <i className="fas fa-times" onClick={props.onFormRemove} />
+          <i className="fas fa-times" onClick={NewFormCtxValues.closeForm} />
         </button>
-        <div className={styles['contact-form__input-container']}>
-          <label className={styles['contact-form__label']} htmlFor="name">
-            Name
-          </label>
-          <Input
-            ref={nameInputRef}
-            className={`${styles['contact-form__input']} ${
-              formValidState.errSite === 'Name' && styles['invalid']
-            }`}
-            type="text"
-            id="name"
-          />
-        </div>
-        <div className={styles['contact-form__input-container']}>
-          <label className={styles['contact-form__label']} htmlFor="phone">
-            Phone number
-          </label>
-          <Input
-            ref={phoneInputRef}
-            className={`${styles['contact-form__input']} ${
-              formValidState.errSite === 'Phone' && styles['invalid']
-            }
-            `}
-            type="text"
-            id="phone"
-          />
-        </div>
-        <div className={styles['contact-form__input-container']}>
-          <label className={styles['contact-form__label']} htmlFor="Tags">
-            Tags
-          </label>
-          <Input
-            ref={tagsInputRef}
-            className={styles['contact-form__input']}
-            type="text"
-            id="Tags"
-          />
-        </div>
+        <NewContactInput
+          type="text"
+          id="name"
+          label="Name"
+          ref={nameInputRef}
+          errSite={formValidState.errSite}
+        />
+        <NewContactInput
+          type="number"
+          id="num"
+          label="Phone number"
+          ref={phoneInputRef}
+          errSite={formValidState.errSite}
+        />
+        <NewContactInput type="text" id="tag" label="tags" ref={tagsInputRef} />
         <Button
           type="submit"
           className={`btn-outline-primary ${styles['contact-form__btn']}`}
@@ -142,6 +124,8 @@ const NewContact = function (props) {
         </Button>
       </form>
     </React.Fragment>
+  ) : (
+    ''
   );
 };
 

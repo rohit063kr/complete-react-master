@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import styles from './Header.module.scss';
 
 import HeaderSearchFrom from './HeaderSearchForm';
 import Button from '../UI/Button';
 
+import ContactContext from '../../store/contact-context/contact-context';
+
 const Header = function (props) {
+  const contactCtxValues = useContext(ContactContext);
+
   return (
     <header className={styles['header']}>
       <div className={styles['header__config']}>
-        <HeaderSearchFrom onContactsFilter={props.onFilter} />
+        <HeaderSearchFrom />
         <div className={styles['header__sort']}>
           <label className={styles['header__sort-label']}>Sort by: </label>
           <select className={styles['header__sort-select']}>
@@ -17,7 +21,7 @@ const Header = function (props) {
           </select>
         </div>
         <div className={styles['header__list-config']}>
-          1-10 of {props.numContacts}
+          1-10 of {contactCtxValues.numOfContacts}
           <span className={styles['header__list-btns']}>
             <Button
               type="button"
