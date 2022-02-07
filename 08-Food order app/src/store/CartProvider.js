@@ -1,80 +1,99 @@
 //Here we can store our context logic(main logic) -> context can be used to store logic so that root component don't get sucked by these logics
 
-import React, { useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import CartContext from './cart-context';
 
-const itemsPresent = [
-  {
-    item: 'Pizza',
-    description: 'Delicious pizza with non-veg ingredients',
-    cost: 23.02,
-  },
-  {
-    item: 'Burger',
-    description: 'Burger full of cheese slices',
-    cost: 13.02,
-  },
-  {
-    item: 'Suzzi',
-    description: 'Best chinese food of our resturant',
-    cost: 41.06,
-  },
-  {
-    item: 'Pasta',
-    description: 'One of the best serving present in our resturant',
-    cost: 7,
-  },
-  {
-    item: 'French fries',
-    description: 'Crunchy fries with tomato sauce and much more',
-    cost: 3.02,
-  },
-];
+let itemsPresent;
 
-const itemsBoughtReducer = function (prevState, action) {
-  const repeatOrderCondition = action.type === 'Repeat order';
+const cartReducer = function (prevState, action) {
+  if (action.type === 'REPEAT_ORDER') {
+    prevState.find(itemObj => itemObj.item === action.itemId).times +=
+      action.itemTimes;
+    return [...prevState];
+  }
 
-  return [
-    repeatOrderCondition
-      ? prevState.filter(el => el.items[0].item !== action.itemId)
-      : prevState,
-    {
-      items: itemsPresent.filter(item => item.item === action.itemId),
-      times: repeatOrderCondition
-        ? prevState.find(el => el.items[0].item === action.itemId).times + 1
-        : action.itemTimes,
-    },
-  ].flat();
+  if (action.type === 'NEW_ORDER') {
+    return [
+      {
+        ...itemsPresent.filter(item => item.item === action.itemId)[0],
+        times: action.itemTimes,
+      },
+      ...prevState,
+    ];
+  }
+
+  if (action.type === 'REMOVE_ITEM') {
+    prevState.find(itemObj => itemObj.item === action.itemId).times -= 1;
+    return prevState.filter(itemObj => itemObj.times > 0);
+  }
 };
 
 const CartProvider = function (props) {
-  const [itemsBought, dispatchItemsBoughtAction] = useReducer(
-    itemsBoughtReducer,
-    []
-  );
+  const [cartItems, dispatchCartItems] = useReducer(cartReducer, []);
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  itemsPresent = items;
+
+  useEffect(() => {
+    const fetchMeals = async function () {
+      setIsLoading(true);
+      const responses = await fetch(
+        'https://food-base-2-default-rtdb.firebaseio.com/meals.json'
+      );
+
+      if (!responses.ok) throw new Error();
+
+      const data = await responses.json();
+      setIsLoading(false);
+      const meals = [];
+      for (const item of Object.entries(data)) {
+        meals.push({
+          id: item[0],
+          item: item[1].item,
+          cost: item[1].price,
+          description: item[1].description,
+        });
+      }
+      setItems(meals);
+    };
+
+    fetchMeals().catch(err => {
+      setError('Something went wrong!  ' + err.message);
+      setIsLoading(false);
+    });
+  }, []);
 
   const itemsBoughtHandler = function (itemId, itemTime) {
     const itemTimes = itemTime || 1;
 
-    const isMatching = itemsBought.some(el => el.items[0].item === itemId);
+    const isMatching = cartItems.some(el => el.item === itemId);
 
-    dispatchItemsBoughtAction({
-      type: isMatching ? 'Repeat order' : 'Add new item',
+    dispatchCartItems({
+      type: isMatching ? 'REPEAT_ORDER' : 'NEW_ORDER',
       itemId,
       itemTimes,
     });
   };
 
-  const totalCost = itemsBought
-    .reduce((counter, item) => item.items[0].cost * item.times + counter, 0)
+  const totalCost = cartItems
+    .reduce((counter, item) => item.cost * item.times + counter, 0)
     .toFixed(2);
+
+  const cartItemRemoveHandler = function (e) {
+    const itemId = e.target.closest('.cart__item').dataset.id;
+    dispatchCartItems({ type: 'REMOVE_ITEM', itemId });
+  };
 
   const contextValue = {
     itemsAvailable: itemsPresent,
-    itemsInCart: itemsBought,
+    itemsInCart: cartItems,
     totalAmount: totalCost,
+    isLoading,
+    error,
     addItems: itemsBoughtHandler,
-    removeItem: () => {},
+    removeItem: cartItemRemoveHandler,
   };
 
   return (

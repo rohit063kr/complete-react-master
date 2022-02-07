@@ -16,13 +16,15 @@ const MenuForm = function (props) {
       e.target.closest('div').dataset.id,
       +timesInputRef.current.value
     );
+
+    timesInputRef.current.value = '';
   };
 
   return (
     <form className={styles['menu__item-config']} onSubmit={itemBoughtHandler}>
       <div className={styles['menu__item-times']}>
         <label>Quantity:</label>
-        <Input />
+        <Input type="number" ref={timesInputRef} />
       </div>
       <Button type="submit">+Add</Button>
     </form>

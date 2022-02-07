@@ -20,7 +20,7 @@ const formValidReducer = function (_, action) {
     return {
       isValid: false,
       errMsg: 'Please write valid phone number or remove (+91) if you added it',
-      errSite: 'Phone',
+      errSite: 'Phone number',
     };
 
   return { isValid: true, errMsg: null };

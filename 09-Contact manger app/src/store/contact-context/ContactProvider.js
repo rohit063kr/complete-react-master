@@ -1,4 +1,5 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useCallback } from 'react';
+import useSendRequest from '../../hooks/use-send-request';
 
 import ContactContext from './contact-context';
 
@@ -25,26 +26,61 @@ const contactReducer = function (prevState, action) {
 };
 
 const ContactProvider = function (props) {
+  const { sendRequest } = useSendRequest();
+
   const [contactState, dispatchContactState] = useReducer(contactReducer, {
     allContacts: [],
     filteredContacts: [],
   });
 
-  useEffect(() => {
-    const contacts = JSON.parse(localStorage.getItem('contacts'));
-    contacts &&
-      dispatchContactState({ type: 'COLLECT_CONTACTS', data: contacts });
+  const extractData = useCallback(function (data) {
+    const contacts = [];
+    for (const el of Object.entries(data)) {
+      contacts.push({
+        id: el[0],
+        name: el[1].name,
+        phone: el[1].phone,
+        tags: el[1].tags,
+      });
+    }
+    return contacts;
   }, []);
 
-  const saveContacts = function (data) {
-    localStorage.setItem('contacts', JSON.stringify(data));
+  const loadContacts = useCallback(
+    async function () {
+      const data = await sendRequest({
+        url: 'https://contact-management-app-29bc3-default-rtdb.firebaseio.com/contacts.json',
+      });
+      return data ? extractData(data) : null;
+    },
+    [extractData, sendRequest]
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const contacts = await loadContacts();
+      contacts &&
+        dispatchContactState({ type: 'COLLECT_CONTACTS', data: contacts });
+    };
+    fetchData();
+  }, [loadContacts]);
+
+  const saveContacts = async function (data) {
+    sendRequest({
+      url: 'https://contact-management-app-29bc3-default-rtdb.firebaseio.com/contacts.json',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: data,
+    });
   };
 
   const formSubmitHandler = function (data) {
     // setContactData(prevData => [...prevData, data]);
     dispatchContactState({ type: 'COLLECT_CONTACTS', data: [data] });
 
-    saveContacts([...contactState.allContacts, data]);
+    saveContacts(data);
   };
 
   const contactFilterHandler = function (filterKeyword) {

@@ -1,0 +1,15 @@
+.contacts {
+  &__tags {
+    overflow: hidden;
+  }
+
+  &__tag {
+    padding: 0.5rem 1rem;
+    color: #ccc;
+    background: #333;
+
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
+}

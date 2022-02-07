@@ -7,6 +7,7 @@ import styles from './Cart.module.scss';
 import Button from '../UI/Button';
 import Card from '../UI/Card';
 import ListItems from '../UI/ListItems';
+import OrderForm from '../OrderForm/OrderForm';
 
 const Cart = function (props) {
   const cartCtx = useContext(CartContext);
@@ -15,23 +16,23 @@ const Cart = function (props) {
 
   const cartItemList = itemsBought.map(el => (
     <ListItems
-      keys={el.items[0].item}
-      className={styles['cart__item']}
-      data-id={el.items[0].item}
+      key={el.item}
+      className={`cart__item ${styles['cart__item']}`}
+      data-id={el.item}
     >
       <span className={styles['cart__item-name']}>
-        {el.items[0].item}
+        {el.item}
         {el.times > 1 && (
           <Button type="button" className={styles['cart__btn']}>
             {' x ' + el.times}
           </Button>
         )}
       </span>
-      <span className={styles['cart__item-cost']}>
-        $ {el.items[0].cost * el.times}
-      </span>
+      <span className={styles['cart__item-cost']}>$ {el.cost * el.times}</span>
       <div className={styles['cart__item-btn']}>
-        <Button type="button">-</Button>
+        <Button type="button" onClick={cartCtx.removeItem}>
+          -
+        </Button>
       </div>
     </ListItems>
   ));
@@ -66,6 +67,7 @@ const Cart = function (props) {
                 </span>
               </div>
             </div>
+            <OrderForm />
           </Card>
         </div>
       )}

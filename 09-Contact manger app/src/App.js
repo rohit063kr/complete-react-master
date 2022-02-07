@@ -19,7 +19,7 @@ const App = function () {
       <NewFormProvider>
         {ReactDom.createPortal(
           <NewContact />,
-          document.getElementById('new-contact-root')
+          document.getElementById('modal-root')
         )}
         <Navigation />
         <Header />

@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-const Input = function () {
-  return <input type="number" />;
-};
+import styles from './Input.module.scss';
+
+const Input = forwardRef(function (props, ref) {
+  return (
+    <input
+      className={styles['input']}
+      type={props.type}
+      ref={ref}
+      onChange={props.onChange}
+    />
+  );
+});
 
 export default Input;

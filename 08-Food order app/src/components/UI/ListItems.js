@@ -6,7 +6,6 @@ const ListItems = function (props) {
   return (
     <div
       data-id={props['data-id']}
-      key={props.keys}
       className={`${styles.items} ${props.className}`}
     >
       {props.children}
